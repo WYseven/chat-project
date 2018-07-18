@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title></title>
+</head>
+
+<body>
+  <h1>注册</h1>
+  <input type="text" id="message" />
+  <input type="button" value="注册" id="send" />
+  <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+  <script>
+    
+    
+    $('#send').click(function () {
+      var val = $('#message').val().trim();
+      $.ajax({
+        url: '/login',
+        method: 'post',
+        data:{
+          name: val
+        },
+        success(data){
+          console.log(data)
+        }
+      })
+    })
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title></title>
+</head>
+
+<body>
+  <h1>欢迎来到聊天室</h1>
+  <ul>
+    <li></li>
+  </ul>
+  <input type="text" id="message" />
+  <input type="button" value="提交" id="send" />
+  <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect('http://localhost:8081');
+    socket.on('news', function (data) {
+      socket.emit('my other event', { my: 'data' });
+    });
+
+    socket.on('init send message', (data) => {
+      console.log(data)
+    })
+    
+    $('#send').click(function () {
+      var val = $('#message').val().trim();
+      
+      socket.emit('say message', { message: val });
+
+    })
+
+  </script>
+</body>
+
+</html>
