@@ -9,27 +9,47 @@
 
 <body>
   <h1>欢迎来到聊天室</h1>
-  <ul>
-    <li></li>
+  <ul class='list'>
+    <li>XX说：</li>
   </ul>
+
   <input type="text" id="message" />
   <input type="button" value="提交" id="send" />
+  <p style="display: none;" class="user-box">欢迎进入聊天室</p>
   <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io.connect('http://localhost:8081');
-    socket.on('news', function (data) {
-      socket.emit('my other event', { my: 'data' });
+    let mySelfName = null;
+    socket.on('welcome chat', function (data) {
+      mySelfName = data.mySelfName;
     });
-
-    socket.on('init send message', (data) => {
+    // 获取来访者的用户名
+    let userName = null;
+    socket.on('have people come in', (data) => {
+      userName = data.userName;
+      if(userName){
+        $('.user-box').show().text(`欢迎${userName}进入聊天室`)
+      }
+    })
+    
+    socket.emit('I am come in')
+    socket.on('I am come in', (data) => {
       console.log(data)
+    })
+
+    socket.on('have people say message', (data) => {
+      console.log(data)
+      $('.list').append(`<li>${data.userName}说：${data.message}</li>`)
     })
     
     $('#send').click(function () {
       var val = $('#message').val().trim();
       
-      socket.emit('say message', { message: val });
+      socket.emit('say message', { 
+        userName: mySelfName,
+        message: val
+       });
 
     })
 
